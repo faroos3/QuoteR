@@ -8,7 +8,8 @@ except ImportError:
     # for Python3
     from tkinter import *
     import tkinter as tk
-
+ 
+textFont1 = ("Courier New", 16, "normal")
 ##These are classes for each step in the QuoteR program
 
 ##general page class    
@@ -25,12 +26,64 @@ class WelcomePage(Page):
         label.config(font=("Courier", 44))
         label.pack(side="top", fill="both", expand=True)
         
-class InputPage(Page):
-    def __init__(self, master):
+class InputPage(Page): 
+    def __init__(self, master,fnout):
         Page.__init__(self, master)
-        label = tk.Label(self, text="Input your text to memorize: ")
-        label.config(font=("Courier", 32))
-        label.pack(side="top", fill="both", expand=True)
+        label = tk.Label(self, text="Enter your text")
+        label.config(font=("Courier", 44)) 
+        label.grid(row=0, column=0,sticky="ns")
+       
+        
+        self.fnout = fnout
+        self.mainFrame = tk.Frame(self)
+ 
+        top=self.winfo_toplevel()
+        top.columnconfigure(0, weight=1)
+        top.rowconfigure(0, weight=1)
+ 
+        self.mainFrame.grid(row=1, column=0, sticky="nsew")
+        self.exit = tk.Button(self.mainFrame,
+                                   text="Save your text",
+                                   command=self.finish)
+        self.exit.grid(row=4, column=0, sticky="ns")
+        self.exit.config(font=("Courier", 16)) 
+ 
+ 
+        self.mainFrame.columnconfigure(0, weight=1)
+        self.mainFrame.rowconfigure(1, weight=1)
+ 
+        vscrollbar = ScrollbarX(self.mainFrame)
+        vscrollbar.grid(row=1, column=1, sticky="ns")
+        hscrollbar = ScrollbarX(self.mainFrame, orient=tk.HORIZONTAL)
+        hscrollbar.grid(row=2, column=0, sticky="ew")
+        hscrollbar.grid(row=2, column=0, padx=(100, 0))
+       
+ 
+        self.textWidget = tk.Text(self.mainFrame,
+                                       yscrollcommand=vscrollbar.set,
+                                       xscrollcommand=hscrollbar.set,
+                                       wrap=tk.NONE,
+                                       height=24,
+                                       width=84,
+                                       font=textFont1)
+      
+        self.textWidget.grid(row=1, column=0, sticky="nsew")
+        self.textWidget.grid(row=1, column=0, padx=(100, 0))
+             
+        
+ 
+        hscrollbar["command"] = self.textWidget.xview
+        vscrollbar["command"] = self.textWidget.yview
+        
+ 
+    def finish(self):
+        fout = open(self.fnout, 'w')
+        fout.write(self.textWidget.get("1.0", "end"))
+        fout.close()
+        app.destroy()
+        
+        
+             
 
 class ReadyPage(Page):
     def __init__(self, master):
@@ -59,6 +112,14 @@ class ComparisonPage(Page):
         label = tk.Label(self, text="Your input       Time         Your voice")
         label.config(font=("Courier", 32))
         label.pack(side="top", fill="both", expand=True)
+        
+class ScrollbarX(tk.Scrollbar):
+    def set(self, low, high):
+        if float(low) <= 0.0 and float(high) >= 1.0:
+            self.grid_remove()
+        else:
+            self.grid()
+        tk.Scrollbar.set(self, low, high)
        
 class MyFirstGUI(tk.Frame):
     def __init__(self, master):
@@ -67,7 +128,7 @@ class MyFirstGUI(tk.Frame):
         tk.Frame.__init__(self,master)
         ## make pages
         p0 = WelcomePage(self)
-        p1 = InputPage(self)
+        p1 = InputPage(self,fnout)
         p2 = ReadyPage(self)
         p3 = TimerPage(self)
         p4 = ProcessingPage(self)
@@ -127,11 +188,9 @@ class MyFirstGUI(tk.Frame):
         
 
    
-        
-        
-
+             
+fnout = "editresult.txt"
 root = tk.Tk()
-
 my_gui = MyFirstGUI(root)
 my_gui.pack(side="top", fill="both", expand=True)
 ##root.wm_geometry("1024x768")
