@@ -1,0 +1,46 @@
+'''
+This is going the be the different word class used to help evaluate which words are different, and which are not.
+'''
+
+class DiffWord:
+
+    #honestly, isDifferent should always be True
+
+
+    def __init__(self, OWord = "", isDiff = True, idex = 1000000000):
+        #default constructor for a word for some reason.
+        self.word = OWord #what the word is
+        self.isDifferent = isDiff #if the word is different or nah
+        self.index = idex #some arbitrary large number.
+'''
+    def __init__(self, OWord, isDiff, Oindex):
+        #constructor for good stuff
+        self.word = OWord
+        self.isDifferent = isDiff
+        self.index = Oindex
+    #constructor in case an index isn't needed
+    def __init__(self, OWord, isDiff):
+        self.word = OWord
+        self.isDifferent = isDiff
+        self.index = 1000000000 #arbitrary thing
+'''
+
+    #print function
+    def __print__(self):
+        print self.word
+
+    #Observers
+    def getWord(self): #get the word
+        ans = self.word
+        return ans
+
+    def isDiff(self):
+        return True == self.isDifferent
+
+    def getIndex(self):
+        return self.index
+
+
+if __name__ == "__main__":
+    test = DiffWord()
+    print test

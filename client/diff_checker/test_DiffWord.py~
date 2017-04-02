@@ -1,0 +1,9 @@
+'''
+the point of this file is to test DiffWord.py
+'''
+from DiffWord.py import DiffWord
+
+
+if __name__ == "__main__":
+    test = DiffWord()
+    print test
