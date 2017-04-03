@@ -39,7 +39,21 @@ def get_DiffWords(words1, words2):
     #file, the first index in the tuple of .getIndex is the
     #locaiton of the word in the original, and the location
     #of it in the derived is the second. A value of -1 means
-    #it does not even show up in that place. 
+    #it does not even show up in that place.
+
+    num_words1 = len(words1)
+    num_words2 = len(words2)
+
+    more_words = max(num_words1, num_words2)
+    less_words = min(num_words1, num_words2)
+    #get the words from there
+    i = 0 #going to keep track of the index as well 
+    for index in range(less_words):
+        if(words1[index] == words2[index]):
+            #if the words are the same, have a
+            #DiffWord with isDiff = False
+            word = DiffWord(words[index], False, [words1[index], words2[index]])
+            
     
     return ans_list
 
