@@ -4,14 +4,15 @@ This is going the be the different word class used to help evaluate which words 
 
 class DiffWord:
 
-    #honestly, isDifferent should always be True
+    #all the words should be DiffWords
 
 
-    def __init__(self, OWord = "", isDiff = True, idex = 1000000000):
+    def __init__(self, OWord = "", isDiff = True, idex = [-1, -1]):
         #default constructor for a word for some reason.
         self.word = OWord #what the word is
         self.isDifferent = isDiff #if the word is different or nah
-        self.index = idex #some arbitrary large number.
+        self.index = idex #the first position of the list is the position of the
+        #word in the original file, the second position of it is in the derived file.
 
     def __str__(self):
         return self.word
@@ -26,3 +27,9 @@ class DiffWord:
 
     def getIndex(self):
         return self.index
+
+    def get_pos_in_original(self):
+        return self.index[0]
+
+    def get_pos_in_derived(self):
+        return self.index[1]
