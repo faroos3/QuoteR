@@ -52,8 +52,17 @@ def get_DiffWords(words1, words2):
         if(words1[index] == words2[index]):
             #if the words are the same, have a
             #DiffWord with isDiff = False
-            word = DiffWord(words[index], False, [words1[index], words2[index]])
-            
+            word = DiffWord(words1[index], False, [index, index])
+            print "This should be the same:", word.getIndex(), "And isDiff returns:", word.isDiff()
+            ans_list.append(word)
+        if(words1[index] != words2[index]):
+            word1 = DiffWord(words1[index], True, [index, -1])
+            word2 = DiffWord(words2[index], True, [-1, index])
+            print "Word1's indices are:", word1.getIndex(), "And isDiff returns:", word1.isDiff()
+            print "Word2's indices are:", word2.getIndex(), "And isDiff returns:", word2.isDiff()
+            ans_list.append(word1)
+            ans_list.append(word2)
+        
     
     return ans_list
 
@@ -82,5 +91,12 @@ if __name__ == "__main__":
         print word,
     #end testing purposes. the only differences between the two tests are the names changed to Moorthy, the student
     #writing bad code (instead of the master dying), the change on one word to badDocumentation, and bad code at the end.
-
+    print "\n\n"
+    #see if the DiffWord worked 
     
+    diffWords = get_DiffWords(f1_words, f2_words)
+    for word in diffWords:
+        if(word.isDiff()):
+            print str(word) + " is different."
+        else:
+            print str(word) + " is not different."
