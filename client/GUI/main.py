@@ -4,12 +4,15 @@ try:
     # for Python2
     from Tkinter import *
     import Tkinter as tk
+    import time
 except ImportError:
     # for Python3
     from tkinter import *
     import tkinter as tk
+    import time
  
 textFont1 = ("Courier New", 16, "normal")
+sec = 0
 ##These are classes for each step in the QuoteR program
 
 ##general page class    
@@ -94,10 +97,16 @@ class ReadyPage(Page):
 
 class TimerPage(Page):
     def __init__(self, master):
-        Page.__init__(self,master)
-        label = tk.Label(self, text="Press button when finished")
+        Page.__init__(self, master)
+        label = tk.Label(self, text="Press stop when finished ")
         label.config(font=("Courier", 32))
-        label.pack(side="top", fill="both", expand=True)
+        label.pack(side="top", fill="both", expand=True)   
+       
+    
+             
+          
+      
+    
         
 class ProcessingPage(Page):
     def __init__(self,master):
@@ -108,10 +117,111 @@ class ProcessingPage(Page):
         
 class ComparisonPage(Page):
     def __init__(self,master):
-        Page.__init__(self,master)
-        label = tk.Label(self, text="Your input       Time         Your voice")
-        label.config(font=("Courier", 32))
-        label.pack(side="top", fill="both", expand=True)
+        Page.__init__(self, master) 
+        self.fnout = "input.txt"
+        self.mainFrame = tk.Frame(self)
+        self.mainFrame.grid(row=1, column=0, sticky="nsew")
+ 
+        top=self.winfo_toplevel()
+        top.columnconfigure(0, weight=1)
+        top.rowconfigure(0, weight=1)        
+       
+        ##label = tk.Label(self, text="Your Text")
+        ##label.config(font=("Courier", 22)) 
+        ##label.grid(row=0, column=0)
+        ##label2 = tk.Label(self, text="Your Audio Input")
+        ##label2.config(font=("Courier", 22)) 
+        ##label2.grid(row=0, column=1)
+        
+
+   
+ 
+        
+        self.exit = tk.Button(self.mainFrame,
+                                   text="Load Input Text"
+                                  )
+        self.exit.grid(row=4, column=0, sticky="ns")
+        self.exit.config(font=("Courier", 16)) 
+        
+        self.exit = tk.Button(self.mainFrame,
+                                   text="Load Audio Text"
+                                   )
+        self.exit.grid(row=4, column=1, sticky="ns")
+        self.exit.config(font=("Courier", 16))        
+ 
+ 
+        self.mainFrame.columnconfigure(0, weight=1)
+        self.mainFrame.rowconfigure(1, weight=1)
+ 
+        vscrollbar = ScrollbarX(self.mainFrame)
+        vscrollbar.grid(row=1, column=1, sticky="ns")
+        hscrollbar = ScrollbarX(self.mainFrame, orient=tk.HORIZONTAL)
+        hscrollbar.grid(row=2, column=0, sticky="ew")
+        hscrollbar.grid(row=2, column=0, padx=(100, 0))
+       
+ 
+        self.textWidget = tk.Text(self.mainFrame,
+                                       yscrollcommand=vscrollbar.set,
+                                       xscrollcommand=hscrollbar.set,
+                                       wrap=tk.NONE,
+                                       height=24,
+                                       width=44,
+                                       font=textFont1)
+      
+        self.textWidget.grid(row=1, column=0, sticky="nsew")
+        self.textWidget.grid(row=1, column=0, padx=(100, 0))
+        
+        
+        vscrollbar2 = ScrollbarX(self.mainFrame)
+        vscrollbar2.grid(row=1, column=3, sticky="ns")
+        hscrollbar2 = ScrollbarX(self.mainFrame, orient=tk.HORIZONTAL)
+        hscrollbar2.grid(row=2, column=1, sticky="ew")
+        hscrollbar2.grid(row=2, column=1, padx=(100, 0))
+       
+ 
+        self.textWidget2 = tk.Text(self.mainFrame,
+                                       yscrollcommand=vscrollbar2.set,
+                                       xscrollcommand=hscrollbar2.set,
+                                       wrap=tk.NONE,
+                                       height=24,
+                                       width=44,
+                                       font=textFont1)
+      
+        self.textWidget2.grid(row=1, column=1, sticky="nsew")
+        self.textWidget2.grid(row=1, column=1, padx=(100, 0))        
+             
+        
+ 
+        hscrollbar["command"] = self.textWidget.xview
+        vscrollbar["command"] = self.textWidget.yview
+        hscrollbar2["command"] = self.textWidget2.xview
+        vscrollbar2["command"] = self.textWidget2.yview 
+        
+        file = open("input.txt")
+        for line in file:
+            self.textWidget.insert(END,line)
+        file.close() 
+        
+        
+        file2 = open("audioInput.txt")
+        for line2 in file2:
+            self.textWidget2.insert(END,line2)
+        
+        file2.close() 
+        
+        ##idea for the future
+        ## make a command on each button that loads the input for each
+        ## file
+        ##ie it only inserts the stuff once you click the button
+        ##so it gets an updated  version of each file
+                 
+    
+        
+ 
+       
+        
+       
+        
         
 class ScrollbarX(tk.Scrollbar):
     def set(self, low, high):
@@ -120,6 +230,8 @@ class ScrollbarX(tk.Scrollbar):
         else:
             self.grid()
         tk.Scrollbar.set(self, low, high)
+        
+
        
 class MyFirstGUI(tk.Frame):
     def __init__(self, master):
@@ -128,7 +240,7 @@ class MyFirstGUI(tk.Frame):
         tk.Frame.__init__(self,master)
         ## make pages
         p0 = WelcomePage(self)
-        p1 = InputPage(self,fnout)
+        p1 = InputPage(self,inText)
         p2 = ReadyPage(self)
         p3 = TimerPage(self)
         p4 = ProcessingPage(self)
@@ -137,6 +249,8 @@ class MyFirstGUI(tk.Frame):
         ##make button frames
         buttonframe = tk.Frame(self)
         container = tk.Frame(self)
+        container.configure(background='black')
+        
         buttonframe.pack(side="top", fill="x", expand=False)
         container.pack(side="top", fill="both", expand=True)
         
@@ -183,15 +297,16 @@ class MyFirstGUI(tk.Frame):
         y = (sh - h)/2
                 
         
-              
         self.master.geometry('%dx%d+%d+%d' % (w, h, x, y)) 
         
 
    
              
-fnout = "editresult.txt"
+inText = "input.txt"
+audioText = "audioInput.txt"
 root = tk.Tk()
 my_gui = MyFirstGUI(root)
 my_gui.pack(side="top", fill="both", expand=True)
+
 ##root.wm_geometry("1024x768")
 root.mainloop()
