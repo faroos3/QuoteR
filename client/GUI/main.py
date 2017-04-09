@@ -22,16 +22,24 @@ class Page(tk.Frame):
     def show(self):
         self.lift()
         
+## This page will just be a welcome slide that 
+## outputs text and directs the user to the next page.        
 class WelcomePage(Page):
     def __init__(self, master):
         Page.__init__(self, master)
+        ##welcome label
         label = tk.Label(self, text="Welcome to QuoteR")
+        ##set font
         label.config(font=("Courier", 44))
+        ##formating
         label.pack(side="top", fill="both", expand=True)
-        
+
+##this page has a text box where the user can input the correct version of the
+##input in text format
 class InputPage(Page): 
     def __init__(self, master,fnout):
         Page.__init__(self, master)
+        ##text label and formatting
         label = tk.Label(self, text="Enter your text")
         label.config(font=("Courier", 44)) 
         label.grid(row=0, column=0,sticky="ns")
@@ -91,9 +99,32 @@ class InputPage(Page):
 class ReadyPage(Page):
     def __init__(self, master):
         Page.__init__(self, master)
+
+
+        
+
         label = tk.Label(self, text="Ready?\n Click the button below to start reciting ")
         label.config(font=("Courier", 32))
-        label.pack(side="top", fill="both", expand=True)
+        label.grid(row=0, column=0, sticky="ns")
+
+        self.mainFrame = tk.Frame(self)
+        self.mainFrame.grid(row=1, column=0, sticky="nsew")
+
+ 
+        top=self.winfo_toplevel()
+        top.columnconfigure(1, weight=1)
+        top.rowconfigure(1, weight=1)  
+        self.start = tk.Button(self.mainFrame,text="Start")
+        self.start.grid(row=3, column=3, sticky="ns")
+        
+        ##self.start.place(relx=0.5, rely=0.5, anchor=CENTER)
+        self.start.config(font=("Courier", 16)) 
+        self.done = tk.Button(self.mainFrame,
+                                   text="Done"
+                                  )
+       ## self.done.grid(row=3, column=4, sticky="ns")
+        self.done.config(font=("Courier", 16)) 
+        self.done.place(relx=.5, rely=.5, anchor=CENTER)
 
 class TimerPage(Page):
     def __init__(self, master):
