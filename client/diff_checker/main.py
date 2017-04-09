@@ -49,6 +49,17 @@ def get_DiffWords(words1, words2):
     #get the words from there
     i = 0 #going to keep track of the index as well 
     for index in range(less_words):
+        #so this works until you get to a spot where there is a
+        #diff number of words (i.e. instead of "killing"
+        #"there's "bad code". It then assumes everything
+        #is different. So, in order to fix this,
+        #I'll try getting to until a word is different,
+        #break, save the index, keep going until
+        #the words start up to be the same again
+        #and repeat. While the words ain't
+        #the same, it'll keep making
+        #diff words. Maybe I can split
+        #that up into functions. 
         if(words1[index] == words2[index]):
             #if the words are the same, have a
             #DiffWord with isDiff = False
