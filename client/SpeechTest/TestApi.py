@@ -27,3 +27,13 @@ except sr.RequestError as e:
     print("Could not request results from Google Speech Recognition service; {0}".format(e))
 
 
+
+
+#  Google Cloud Speech - this requires a service account, we dont have one right now
+#GOOGLE_CLOUD_SPEECH_CREDENTIALS = GoogleCredentials.get_application_default()
+#try:
+  #  print("Google Cloud Speech thinks you said " + r.recognize_google_cloud(audio, credentials_json=GOOGLE_CLOUD_SPEECH_CREDENTIALS))
+#except sr.UnknownValueError:
+ #   print("Google Cloud Speech could not understand audio")
+#except sr.RequestError as e:
+    #print("Could not request results from Google Cloud Speech service; {0}".format(e))
