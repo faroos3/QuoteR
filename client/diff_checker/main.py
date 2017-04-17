@@ -29,6 +29,16 @@ entries are the same. Returns a list of DiffWords
 '''
 def same_length_list(words1, words2):
     a_list = []
+    for i in range(len(words1)):
+        if(words1[i] == words2[i]):
+            word = DiffWord(words1[i], False, [i, i])
+            #print "This should be the same:", word.getIndex(), "And isDiff returns:", word.isDiff()
+            a_list.append(word)
+        else:
+            diff_word1 = DiffWord(words1[i], True, [i, -1])
+            diff_word2 = DiffWord(words2[i], True, [-1, i])
+            a_list.append(diff_word1)
+            a_list.append(diff_word2)
     return a_list
 
 '''
@@ -36,7 +46,8 @@ This is the helper func that'll be called if the words are of different lengths.
 will return strings of diff length.
 '''
 def diff_length_list(longer_list, shorter_list):
-    a_list
+    a_list = []
+
     return a_list
 
 
@@ -64,7 +75,7 @@ def get_DiffWords(words1, words2):
     less_words = min(num_words1, num_words2)
     same_length = num_words1 == num_words2 #use this to see which helper to call
     if(same_length):
-        ans_list = same_length_list(words1)
+        ans_list = same_length_list(words1, words2)
     else:
         if(num_words1 > num_words2):
             ans_list = diff_length_list(words1, words2)
@@ -108,7 +119,7 @@ def get_DiffWords(words1, words2):
 
 if __name__ == "__main__":
     f1 = open("tragedy_test.txt") #your original text
-    f2 = open("test_tragedy_bad.txt")#what the Google Voice APi will get
+    f2 = open("tragedy_one_word_change.txt")#what the Google Voice APi will get
     #get the words in each file
     f1_words = get_words(f1)
     f2_words = get_words(f2)
