@@ -4,6 +4,7 @@ try:
     # for Python2
     from Tkinter import *
     import Tkinter as tk
+    from DiffWord import * #added by Samad
     import time
 except ImportError:
     # for Python3
