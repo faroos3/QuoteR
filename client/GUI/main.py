@@ -39,7 +39,6 @@ class WelcomePage(Page):
 ##input in text format
 class InputPage(Page): 
     def __init__(self, master,fnout):
-
         Page.__init__(self, master)
         ##text label and formatting
         label = tk.Label(self, text="Enter your text")
@@ -153,6 +152,19 @@ class ProcessingPage(Page):
  ##here both the output and the input text will be compared and differences will be highlighted       
 class ComparisonPage(Page):
     def __init__(self,master):
+        
+        def loadInputText():
+            file = open("input.txt")
+            for line in file:
+                self.textWidget.insert(END,line)
+            file.close() 
+        def loadAudioText():
+            file2 = open("audioInput.txt")
+            for line2 in file2:
+                self.textWidget2.insert(END,line2)
+            file2.close() 
+
+            
         Page.__init__(self, master) 
         self.fnout = "input.txt"
         self.mainFrame = tk.Frame(self)
@@ -173,13 +185,13 @@ class ComparisonPage(Page):
    
  
         
-        self.exit = tk.Button(self.mainFrame,
+        self.exit = tk.Button(self.mainFrame, command = loadInputText,
                                    text="Load Input Text"
                                   )
         self.exit.grid(row=4, column=0, sticky="ns")
         self.exit.config(font=("Courier", 16)) 
         
-        self.exit = tk.Button(self.mainFrame,
+        self.exit = tk.Button(self.mainFrame, command = loadAudioText,
                                    text="Load Audio Text"
                                    )
         self.exit.grid(row=4, column=1, sticky="ns")
@@ -233,17 +245,9 @@ class ComparisonPage(Page):
         hscrollbar2["command"] = self.textWidget2.xview
         vscrollbar2["command"] = self.textWidget2.yview 
         
-        file = open("input.txt")
-        for line in file:
-            self.textWidget.insert(END,line)
-        file.close() 
+       
         
-        
-        file2 = open("audioInput.txt")
-        for line2 in file2:
-            self.textWidget2.insert(END,line2)
-        
-        file2.close() 
+      
         
         ##idea for the future
         ## make a command on each button that loads the input for each
