@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 This is the text
+=======
+Hello my name is Jarod. 
+>>>>>>> b7237d31dae30fcc043ae49e865afe77805750dc

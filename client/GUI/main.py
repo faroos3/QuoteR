@@ -44,7 +44,7 @@ class InputPage(Page):
         label.config(font=("Courier", 44)) 
         label.grid(row=0, column=0,sticky="ns")
        
-        
+        ##using .grid over pack for a more structured ui
         self.fnout = fnout
         self.mainFrame = tk.Frame(self)
  
@@ -95,7 +95,8 @@ class InputPage(Page):
         
         
              
-
+##this page will be where you begin your reciting and where the audio input will be
+##entered into the file.
 class ReadyPage(Page):
     def __init__(self, master):
         Page.__init__(self, master)
@@ -126,6 +127,7 @@ class ReadyPage(Page):
         self.done.config(font=("Courier", 16)) 
         self.done.place(relx=.5, rely=.5, anchor=CENTER)
 
+##we might time how long it takes for the speach to take place
 class TimerPage(Page):
     def __init__(self, master):
         Page.__init__(self, master)
@@ -138,14 +140,15 @@ class TimerPage(Page):
           
       
     
-        
+ ##potetial processing page if the algorithm takes a while to find differences       
 class ProcessingPage(Page):
     def __init__(self,master):
         Page.__init__(self,master)
         label = tk.Label(self, text="Processing... ")
         label.config(font=("Courier", 32))
         label.pack(side="top", fill="both", expand=True)
-        
+ 
+ ##here both the output and the input text will be compared and differences will be highlighted       
 class ComparisonPage(Page):
     def __init__(self,master):
         Page.__init__(self, master) 
@@ -252,7 +255,7 @@ class ComparisonPage(Page):
        
         
        
-        
+ ##scrollbar class       
         
 class ScrollbarX(tk.Scrollbar):
     def set(self, low, high):
@@ -263,7 +266,7 @@ class ScrollbarX(tk.Scrollbar):
         tk.Scrollbar.set(self, low, high)
         
 
-       
+  ##general class where all layers are palaced and buttons implemented     
 class MyFirstGUI(tk.Frame):
     def __init__(self, master):
         self.master = master
@@ -332,7 +335,7 @@ class MyFirstGUI(tk.Frame):
         
 
    
-             
+##initialization and running             
 inText = "input.txt"
 audioText = "audioInput.txt"
 root = tk.Tk()
