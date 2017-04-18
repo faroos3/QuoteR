@@ -38,6 +38,7 @@ class WelcomePage(Page):
 ##input in text format
 class InputPage(Page): 
     def __init__(self, master,fnout):
+
         Page.__init__(self, master)
         ##text label and formatting
         label = tk.Label(self, text="Enter your text")
