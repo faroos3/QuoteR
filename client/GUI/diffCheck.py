@@ -116,21 +116,3 @@ def get_DiffWords(words1, words2):
 
     return ans_list
 
-
-if __name__ == "__main__":
-    f1 = open("input.txt") #your original text
-    f2 = open("audioInput.txt")#what the Google Voice APi will get
-    #get the words in each file
-    f1_words = get_words(f1)
-    f2_words = get_words(f2)
-
-    #get the number of words of each list
-    num_f1_words = len(f1_words)
-    num_f2_words = len(f2_words)
-
-    diffWords = get_DiffWords(f1_words, f2_words)
-    for word in diffWords:
-        if(word.isDiff()):
-            print str(word) + " is different."
-        else:
-            print str(word) + " is not different."

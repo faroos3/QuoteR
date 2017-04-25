@@ -14,6 +14,8 @@ except ImportError:
 #speech api
 import speech_recognition as sr
 from oauth2client.client import GoogleCredentials
+from diffCheck import *
+
  
 textFont1 = ("Courier New", 16, "normal")
 sec = 0
@@ -197,9 +199,26 @@ class ComparisonPage(Page):
                 self.textWidget.insert(END,line)
             file.close() 
         def loadAudioText():
+            file1 = open("input.txt")
             file2 = open("audioInput.txt")
-            for line2 in file2:
-                self.textWidget2.insert(END,line2)
+            f1_words = get_words(file1)
+            f2_words = get_words(file2)
+            num_f1_words = len(f1_words)
+            num_f2_words = len(f2_words)
+
+            diffWords = get_DiffWords(f1_words, f2_words)
+            self.textWidget2.insert(END,str(num_f1_words))
+            self.textWidget2.insert(END,str(num_f2_words))
+            for word in diffWords:
+                if(word.isDiff()):
+                    self.textWidget2.insert(END,(str(word) + " is different."))
+                else:
+                    self.textWidget2.insert(END,(str(word) + " is not different."))
+
+           ## for line2 in file2:
+            ##    self.textWidget2.insert(END,line2)
+
+            file1.close()
             file2.close() 
 
             
