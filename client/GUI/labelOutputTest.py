@@ -11,9 +11,6 @@ except ImportError:
     from tkinter import *
     import tkinter as tk
     import time
-#speech api
-import speech_recognition as sr
-from oauth2client.client import GoogleCredentials
  
 textFont1 = ("Courier New", 16, "normal")
 sec = 0
@@ -95,7 +92,7 @@ class InputPage(Page):
         fout = open(self.fnout, 'w')
         fout.write(self.textWidget.get("1.0", "end"))
         fout.close()
-       
+        app.destroy()
         
         
              
@@ -104,67 +101,32 @@ class InputPage(Page):
 class ReadyPage(Page):
     def __init__(self, master):
         Page.__init__(self, master)
-        def speechAPI():
-            r = sr.Recognizer()
-            with sr.Microphone() as source:
-                print("Say something!")
-                audio = r.listen(source)
-
-            # This is an alternative to goolge if we want, but it's also a requirment for the google api
-            try:
-                print("Sphinx thinks you said " + r.recognize_sphinx(audio))
-            except sr.UnknownValueError:
-                print("Sphinx could not understand audio")
-            except sr.RequestError as e:
-                print("Sphinx error; {0}".format(e))
-
-            # recognize speech using Google Speech Recognition
-            try:
-                 #right now , we are using the default API key
-                #`r.recognize_google(audio, key="GOOGLE_SPEECH_RECOGNITION_API_KEY")` will get a different one
-                 #instead of `r.recognize_google(audio)`
-                print("Google Speech Recognition thinks you said " + r.recognize_google(audio))
-            except sr.UnknownValueError:
-               print("Google Speech Recognition could not understand audio")
-            except sr.RequestError as e:
-                print("Could not request results from Google Speech Recognition service; {0}".format(e))
-
-            file2 = open("audioInput.txt","w")
-            try:
-                file2.write(r.recognize_google(audio))
-            except sr.UnknownValueError:
-                file2.write("Google Speech Recognition could not understand audio")
-            except sr.RequestError as e:
-                file2.write("Could not request results from Google Speech Recognition service; {0}".format(e))
-            
-            file2.close() 
 
 
         
 
-        label = tk.Label(self, text="Ready?\n Click the button below to start reciting")
+        label = tk.Label(self, text="Ready?\n Click the button below to start reciting ")
         label.config(font=("Courier", 32))
         label.grid(row=0, column=0, sticky="ns")
 
         self.mainFrame = tk.Frame(self)
         self.mainFrame.grid(row=1, column=0, sticky="nsew")
- 
-        top=self.winfo_toplevel()
-        top.columnconfigure(0, weight=1)
-        top.rowconfigure(0, weight=1)
-       
 
  
-         
-        self.start = tk.Button(self.mainFrame,command = speechAPI, text="Start")
-        self.start.config(font=("Courier", 16)) 
-        self.start.grid(row=2, column=2, sticky="se")\
-        ##self.start.place(relx=0.5, rely=0.5, anchor=CENTER)
+        top=self.winfo_toplevel()
+        top.columnconfigure(1, weight=1)
+        top.rowconfigure(1, weight=1)  
+        self.start = tk.Button(self.mainFrame,text="Start")
+        self.start.grid(row=3, column=3, sticky="ns")
         
-        ##self.done = tk.Button(self.mainFrame,text="Done")
+        ##self.start.place(relx=0.5, rely=0.5, anchor=CENTER)
+        self.start.config(font=("Courier", 16)) 
+        self.done = tk.Button(self.mainFrame,
+                                   text="Done"
+                                  )
        ## self.done.grid(row=3, column=4, sticky="ns")
-       ## self.done.config(font=("Courier", 16)) 
-       ## self.done.place(relx=.5, rely=.5, anchor=CENTER)
+        self.done.config(font=("Courier", 16)) 
+        self.done.place(relx=.5, rely=.5, anchor=CENTER)
 
 ##we might time how long it takes for the speach to take place
 class TimerPage(Page):
@@ -191,15 +153,21 @@ class ProcessingPage(Page):
 class ComparisonPage(Page):
     def __init__(self,master):
         
-        def loadInputText():
+        def loadInputText(v):
             file = open("input.txt")
+            output = ""
             for line in file:
-                self.textWidget.insert(END,line)
+                ##self.textWidget.insert(END,line)
+                output+=line
+            v.set(output)
             file.close() 
-        def loadAudioText():
+        def loadAudioText(v2):
             file2 = open("audioInput.txt")
+            output = ""
             for line2 in file2:
-                self.textWidget2.insert(END,line2)
+                output+=line2
+                ##self.textWidget2.insert(END,line2)
+            v2.set(output)
             file2.close() 
 
             
@@ -207,83 +175,42 @@ class ComparisonPage(Page):
         self.fnout = "input.txt"
         self.mainFrame = tk.Frame(self)
         self.mainFrame.grid(row=1, column=0, sticky="nsew")
+
  
         top=self.winfo_toplevel()
         top.columnconfigure(0, weight=1)
         top.rowconfigure(0, weight=1)        
        
-        ##label = tk.Label(self, text="Your Text")
-        ##label.config(font=("Courier", 22)) 
-        ##label.grid(row=0, column=0)
-        ##label2 = tk.Label(self, text="Your Audio Input")
-        ##label2.config(font=("Courier", 22)) 
-        ##label2.grid(row=0, column=1)
+        v = StringVar()
+        label = tk.Label(self, textvariable=v)
+        label.config(font=("Courier", 10)) 
+        label.grid(row=0, column=0)
+        v2 = StringVar()
+        label2 = tk.Label(self, textvariable=v2)
+        label2.config(font=("Courier", 10)) 
+        label2.grid(row=0, column=1)
         
 
    
  
         
-        self.exit = tk.Button(self.mainFrame, command = loadInputText,
+        self.exit = tk.Button(self.mainFrame, command = loadInputText(v),
                                    text="Load Input Text"
                                   )
         self.exit.grid(row=4, column=0, sticky="ns")
         self.exit.config(font=("Courier", 16)) 
         
-        self.exit2 = tk.Button(self.mainFrame, command = loadAudioText,
+        self.exit = tk.Button(self.mainFrame, command = loadAudioText(v2),
                                    text="Load Audio Text"
                                    )
-        self.exit2.grid(row=4, column=1, sticky="ns")
-        self.exit2.config(font=("Courier", 16))        
+        self.exit.grid(row=4, column=1, sticky="ns")
+        self.exit.config(font=("Courier", 16))        
  
  
         self.mainFrame.columnconfigure(0, weight=1)
         self.mainFrame.rowconfigure(1, weight=1)
  
-        vscrollbar = ScrollbarX(self.mainFrame)
-        vscrollbar.grid(row=1, column=1, sticky="ns")
-        hscrollbar = ScrollbarX(self.mainFrame, orient=tk.HORIZONTAL)
-        hscrollbar.grid(row=2, column=0, sticky="ew")
-        hscrollbar.grid(row=2, column=0, padx=(100, 0))
-       
- 
-        self.textWidget = tk.Text(self.mainFrame,
-                                       yscrollcommand=vscrollbar.set,
-                                       xscrollcommand=hscrollbar.set,
-                                       wrap=tk.NONE,
-                                       height=24,
-                                       width=44,
-                                       font=textFont1)
       
-        self.textWidget.grid(row=1, column=0, sticky="nsew")
-        self.textWidget.grid(row=1, column=0, padx=(100, 0))
-        
-        
-        vscrollbar2 = ScrollbarX(self.mainFrame)
-        vscrollbar2.grid(row=1, column=3, sticky="ns")
-        hscrollbar2 = ScrollbarX(self.mainFrame, orient=tk.HORIZONTAL)
-        hscrollbar2.grid(row=2, column=1, sticky="ew")
-        hscrollbar2.grid(row=2, column=1, padx=(100, 0))
-       
- 
-        self.textWidget2 = tk.Text(self.mainFrame,
-                                       yscrollcommand=vscrollbar2.set,
-                                       xscrollcommand=hscrollbar2.set,
-                                       wrap=tk.NONE,
-                                       height=24,
-                                       width=44,
-                                       font=textFont1)
-      
-        self.textWidget2.grid(row=1, column=1, sticky="nsew")
-        self.textWidget2.grid(row=1, column=1, padx=(100, 0))        
-             
-        
- 
-        hscrollbar["command"] = self.textWidget.xview
-        vscrollbar["command"] = self.textWidget.yview
-        hscrollbar2["command"] = self.textWidget2.xview
-        vscrollbar2["command"] = self.textWidget2.yview 
-        
-       
         
       
         
@@ -291,7 +218,7 @@ class ComparisonPage(Page):
         ## make a command on each button that loads the input for each
         ## file
         ##ie it only inserts the stuff once you click the button
-        ##so it gets an updated  version of each file
+         ##so it gets an updated  version of each file
                  
     
         
