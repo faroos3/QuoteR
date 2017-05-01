@@ -212,10 +212,10 @@ class ComparisonPage(Page):
             self.textWidget2.insert(END,str(num_f2_words))
             for word in diffWords:
                 if(word.isDiff()):
-                    text.tag_configure('color', foreground='red')
+                    self.textWidget2.tag_configure('color', foreground='red')
                     self.textWidget2.insert(END, str(word), 'color')
                 else:
-                    self.textWidget2.insert(END,(str(word) + " is not different."))
+                    self.textWidget2.insert(END,(str(word)))
 
            ## for line2 in file2:
             ##    self.textWidget2.insert(END,line2)
