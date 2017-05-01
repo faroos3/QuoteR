@@ -196,8 +196,14 @@ class ComparisonPage(Page):
         
         def loadInputText():
             file = open("input.txt")
-            for line in file:
-                self.textWidget.insert(END,line)
+            i = 0
+            for word in file:
+                i+=1
+                if(i%10 == 0):
+                    self.textWidget.insert(END,str(word)+" \n")
+                else:
+                    self.textWidget.insert(END,str(word)+" ")
+
             file.close() 
         def loadAudioText():
             file1 = open("input.txt")
@@ -208,14 +214,25 @@ class ComparisonPage(Page):
             num_f2_words = len(f2_words)
 
             diffWords = get_DiffWords(f1_words, f2_words)
-            self.textWidget2.insert(END,str(num_f1_words))
-            self.textWidget2.insert(END,str(num_f2_words))
+            i = 0
             for word in diffWords:
+                i+=1
                 if(word.isDiff()):
-                    self.textWidget2.tag_configure('color', foreground='red')
-                    self.textWidget2.insert(END, str(word), 'color')
+                    if(i%10 == 0):
+                        self.textWidget2.tag_configure('color', foreground='red')
+                        self.textWidget2.insert(END, str(word)+" \n", 'color')
+                    else:
+                        self.textWidget2.tag_configure('color', foreground='red')
+                        self.textWidget2.insert(END, str(word)+" ", 'color')
                 else:
-                    self.textWidget2.insert(END,(str(word)))
+                    if(i%10 == 0):
+                        self.textWidget2.insert(END,str(word)+" \n")
+                    else:
+                        self.textWidget2.insert(END,str(word)+" ")
+
+
+
+                   
 
            ## for line2 in file2:
             ##    self.textWidget2.insert(END,line2)
