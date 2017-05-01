@@ -25,6 +25,7 @@ sec = 0
 class Page(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self,master)
+
     def show(self):
         self.lift()
         
@@ -39,6 +40,7 @@ class WelcomePage(Page):
         label.config(font=("Courier", 44))
         ##formating
         label.pack(side="top", fill="both", expand=True)
+        label.configure(background='navajo white')
 
 ##this page has a text box where the user can input the correct version of the
 ##input in text format
@@ -49,6 +51,8 @@ class InputPage(Page):
         label = tk.Label(self, text="Enter your text")
         label.config(font=("Courier", 44)) 
         label.grid(row=0, column=0,sticky="ns")
+        ##label.configure(background='navajo white')
+
        
         ##using .grid over pack for a more structured ui
         self.fnout = fnout
@@ -172,7 +176,7 @@ class ReadyPage(Page):
 class TimerPage(Page):
     def __init__(self, master):
         Page.__init__(self, master)
-        label = tk.Label(self, text="Press stop when finished ")
+        label = tk.Label(self, text="Stay silent for 5 seconds when finished")
         label.config(font=("Courier", 32))
         label.pack(side="top", fill="both", expand=True)   
        
@@ -181,14 +185,7 @@ class TimerPage(Page):
           
       
     
- ##potetial processing page if the algorithm takes a while to find differences       
-class ProcessingPage(Page):
-    def __init__(self,master):
-        Page.__init__(self,master)
-        label = tk.Label(self, text="Processing... ")
-        label.config(font=("Courier", 32))
-        label.pack(side="top", fill="both", expand=True)
- 
+
  ##here both the output and the input text will be compared and differences will be highlighted       
 class ComparisonPage(Page):
     def __init__(self,master):
@@ -340,7 +337,6 @@ class MyFirstGUI(tk.Frame):
         p1 = InputPage(self,inText)
         p2 = ReadyPage(self)
         p3 = TimerPage(self)
-        p4 = ProcessingPage(self)
         p5 = ComparisonPage(self)
         
         ##make button frames
@@ -356,22 +352,21 @@ class MyFirstGUI(tk.Frame):
         p1.place(in_=container, x=0, y=0, relwidth=1, relheight=1) 
         p2.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
         p3.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
-        p4.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
         p5.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
+        p0.configure(background='blue')
          
         ##place all the buttons      
         b0 = tk.Button(buttonframe, text="Welcome", command=p0.lift)
         b1 = tk.Button(buttonframe, text="Input", command=p1.lift)
         b2 = tk.Button(buttonframe, text="Ready", command=p2.lift)
         b3 = tk.Button(buttonframe, text="Timer", command=p3.lift)
-        b4 = tk.Button(buttonframe, text="Processing", command=p4.lift)
         b5 = tk.Button(buttonframe, text="Comparison", command=p5.lift)
         
         b0.pack(side="left")
+        ##b0.configure(background='blue')
         b1.pack(side="left")
         b2.pack(side="left")
         b3.pack(side="left")
-        b4.pack(side="left")
         b5.pack(side="left")
                         
         ## show welcome page that will link to others
@@ -403,6 +398,8 @@ inText = "input.txt"
 audioText = "audioInput.txt"
 root = tk.Tk()
 my_gui = MyFirstGUI(root)
+root.tk_setPalette(background='navajo white', foreground='black',
+               activeBackground='black', activeForeground='white')
 my_gui.pack(side="top", fill="both", expand=True)
 
 ##root.wm_geometry("1024x768")
