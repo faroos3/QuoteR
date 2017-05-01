@@ -116,37 +116,3 @@ def get_DiffWords(words1, words2):
 
     return ans_list
 
-
-if __name__ == "__main__":
-    f1 = open("tragedy_test.txt") #your original text
-    f2 = open("tragedy_one_word_change.txt")#what the Google Voice APi will get
-    #get the words in each file
-    f1_words = get_words(f1)
-    f2_words = get_words(f2)
-
-    #get the number of words of each list
-    num_f1_words = len(f1_words)
-    num_f2_words = len(f2_words)
-
-
-    #The following is for testing purposes.
-    print "There are ", num_f1_words, "in the original file."
-    print "There are ",num_f2_words," in the file derived from voice."
-    print "The words in f1 (original):\n"
-    for word in f1_words:
-        print word,
-
-    print "\n\nThe words in f2 (derived):\n"
-    for word in f2_words:
-        print word,
-    #end testing purposes. the only differences between the two tests are the names changed to Moorthy, the student
-    #writing bad code (instead of the master dying), the change on one word to badDocumentation, and bad code at the end.
-    print "\n\n"
-    #see if the DiffWord worked
-
-    diffWords = get_DiffWords(f1_words, f2_words)
-    for word in diffWords:
-        if(word.isDiff()):
-            print str(word) + " is different."
-        else:
-            print str(word) + " is not different."
