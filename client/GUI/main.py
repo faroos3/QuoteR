@@ -40,10 +40,10 @@ class WelcomePage(Page):
         label.config(font=("Courier", 44))
         ##formating
         label.pack(side="top", fill="both", expand=True)
-        label.configure(background='navajo white')
+        ##label.configure(background='navajo white')
 
 ##this page has a text box where the user can input the correct version of the
-##input in text format
+##input in text format 
 class InputPage(Page): 
     def __init__(self, master,fnout):
         Page.__init__(self, master)
@@ -51,7 +51,7 @@ class InputPage(Page):
         label = tk.Label(self, text="Enter your text")
         label.config(font=("Courier", 44)) 
         label.grid(row=0, column=0,sticky="ns")
-        ##label.configure(background='navajo white')
+        ##label.configure(background='white')
 
        
         ##using .grid over pack for a more structured ui
@@ -87,9 +87,11 @@ class InputPage(Page):
                                        height=24,
                                        width=84,
                                        font=textFont1)
+
       
         self.textWidget.grid(row=1, column=0, sticky="nsew")
         self.textWidget.grid(row=1, column=0, padx=(100, 0))
+
              
         
  
@@ -117,12 +119,14 @@ class ReadyPage(Page):
                 audio = r.listen(source)
 
             # This is an alternative to goolge if we want, but it's also a requirment for the google api
+            """
             try:
                 print("Sphinx thinks you said " + r.recognize_sphinx(audio))
             except sr.UnknownValueError:
                 print("Sphinx could not understand audio")
             except sr.RequestError as e:
                 print("Sphinx error; {0}".format(e))
+            """
 
             # recognize speech using Google Speech Recognition
             try:
@@ -208,7 +212,8 @@ class ComparisonPage(Page):
             self.textWidget2.insert(END,str(num_f2_words))
             for word in diffWords:
                 if(word.isDiff()):
-                    self.textWidget2.insert(END,(str(word) + " is different."))
+                    text.tag_configure('color', foreground='red')
+                    self.textWidget2.insert(END, str(word), 'color')
                 else:
                     self.textWidget2.insert(END,(str(word) + " is not different."))
 
