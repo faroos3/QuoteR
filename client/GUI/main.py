@@ -218,18 +218,21 @@ class ComparisonPage(Page):
 
             diffWords = get_DiffWords(f1_words, f2_words)
             i = 0
+            j = 0
             for word in diffWords:
                 i += 1
                 if(word.isDiff()):
-                    if(i % 10 == 0):
-                        self.textWidget2.tag_configure(
-                            'color', foreground='red')
-                        self.textWidget2.insert(
-                            END, str(word) + " \n", 'color')
-                    else:
-                        self.textWidget2.tag_configure(
-                            'color', foreground='red')
-                        self.textWidget2.insert(END, str(word) + " ", 'color')
+                    j+=1
+                    if(j%2 == 0):
+                        if(i % 10 == 0):
+                            self.textWidget2.tag_configure(
+                                'color', foreground='red')
+                            self.textWidget2.insert(
+                                END, str(word) + " \n", 'color')
+                        else:
+                            self.textWidget2.tag_configure(
+                                'color', foreground='red')
+                            self.textWidget2.insert(END, str(word) + " ", 'color')
                 else:
                     if(i % 10 == 0):
                         self.textWidget2.insert(END, str(word) + " \n")
