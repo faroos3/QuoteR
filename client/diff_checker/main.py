@@ -3,7 +3,6 @@ This is going to be where Samad test things out with text files or whatever.
 Going to see if I can split up files line by line,
 put them into a list, use a data
 structure, all that jazz.
-
 '''
 
 from DiffWord import DiffWord
@@ -58,26 +57,41 @@ def same_length_list(words1, words2):
 
 
 '''
-This is the helper func that'll be called if
-the words are of different lengths.
-will return strings of diff length.
+This is the helper func that'll be called if the words are of different
+lengths. will return strings of diff length.
+'''
+'''
+words2 is the longer list
 '''
 
-
-def diff_length_list(longer_list, shorter_list):
+def diff_length_list(words2, words1):
     a_list = []
-    same_words_end = False  # turn true once the word is different
-    done = False
-    # while not same_words_end:
-    # for i in range
+    offset = 0
+    for i in range(len(words1)):
+        if(words1[i] == words2[i + offset]):
+            word = DiffWord(words1[i], False, [i, i])
+            # print "This should be the same:", word.getIndex(), "And isDiff
+            # returns:", word.isDiff()
+            a_list.append(word)
+        else:
+            if(words1[i] == words2[i + offset + 1]):
+                #checks next work in line
+                diff_word2 = DiffWord(
+                    words2[i + offset], True, [-1, i + offset])
+                nextword = DiffWord(words1[i], False, [i, i + offset + 1])
+                offset += 1
+                #changes offset to not look at same words twice
+                a_list.append(diff_word2)
+                a_list.append(nextword)
+            elif(words1[i + 1] == words2[i + offset]):
+                diff_word1 = DiffWord(words1[i], True, [i, -1])
+                a_list.append(diff_word1)
 
-    while not done:  # overall done loop while there are still stuff
-        index = 0  # use this to help keep track of length lists
-        while not same_words_end:  # this will reset depending
-            for i in range(len(shorter_list)):  # to start
-                if(shorter_list[i] == longer_list[i]):
-                    pass  # just here for now
-
+            else:
+                diff_word1 = DiffWord(words1[i], True, [i, -1])
+                diff_word2 = DiffWord(words2[i], True, [-1, i])
+                a_list.append(diff_word1)
+                a_list.append(diff_word2)
     return a_list
 
 
@@ -105,8 +119,7 @@ def get_DiffWords(words1, words2):
 
     more_words = max(num_words1, num_words2)
     less_words = min(num_words1, num_words2)
-    same_length = num_words1 == num_words2
-    # ^use this to see which helper to call
+    same_length = num_words1 == num_words2  # use to see which helper to call
     if(same_length):
         ans_list = same_length_list(words1, words2)
     else:
@@ -153,8 +166,7 @@ def get_DiffWords(words1, words2):
 
 if __name__ == "__main__":
     f1 = open("tragedy_test.txt")  # your original text
-    # what the Google Voice APi will get
-    f2 = open("tragedy_one_word_change.txt")
+    f2 = open("test_tragedy_bad.txt")  # what the Google Voice APi will get
     # get the words in each file
     f1_words = get_words(f1)
     f2_words = get_words(f2)

@@ -3,7 +3,6 @@ This is going to be where Samad test things out with text files or whatever.
 Going to see if I can split up files line by
 line, put them into a list, use a data
 structure, all that jazz.
-
 '''
 
 from DiffWord import DiffWord
@@ -58,15 +57,40 @@ def same_length_list(words1, words2):
 
 
 '''
-This is the helper func that'll be called
-if the words are of different lengths.
-will return strings of diff length.
+This is the helper func that'll be called if the words are of different
+lengths. will return strings of diff length.
+'''
+'''
+words2 is the longer list
 '''
 
 
-def diff_length_list(longer_list, shorter_list):
+def diff_length_list(words2, words1):
     a_list = []
+    offset = 0
+    for i in range(len(words1)):
+        if(words1[i] == words2[i + offset]):
+            word = DiffWord(words1[i], False, [i, i])
+            # print "This should be the same:", word.getIndex(), "And isDiff
+            # returns:", word.isDiff()
+            a_list.append(word)
+        else:
+            if(words1[i] == words2[i + offset + 1]):
+                diff_word2 = DiffWord(
+                    words2[i + offset], True, [-1, i + offset])
+                nextword = DiffWord(words1[i], False, [i, i + offset + 1])
+                offset += 1
+                a_list.append(diff_word2)
+                a_list.append(nextword)
+            elif(words1[i + 1] == words2[i + offset]):
+                diff_word1 = DiffWord(words1[i], True, [i, -1])
+                a_list.append(diff_word1)
 
+            else:
+                diff_word1 = DiffWord(words1[i], True, [i, -1])
+                diff_word2 = DiffWord(words2[i], True, [-1, i])
+                a_list.append(diff_word1)
+                a_list.append(diff_word2)
     return a_list
 
 
@@ -94,8 +118,9 @@ def get_DiffWords(words1, words2):
 
     more_words = max(num_words1, num_words2)
     less_words = min(num_words1, num_words2)
-    same_length = num_words1 == num_words2
-    # use this to see which helper to call
+
+    same_length = num_words1 == num_words2  # use to see which helper to call
+
     if(same_length):
         ans_list = same_length_list(words1, words2)
     else:
@@ -124,16 +149,16 @@ def get_DiffWords(words1, words2):
     #         #DiffWord with isDiff = False
     #         word = DiffWord(words1[index], False, [index, index])
     #         print "This should be the same:", word.getIndex(),
-    #        "And isDiff returns:", word.isDiff()
+    #         "And isDiff returns:", word.isDiff()
     #         ans_list.append(word)
     #     if(words1[index] != words2[index]):
     #         break
     #         # word1 = DiffWord(words1[index], True, [index, -1])
     #         # word2 = DiffWord(words2[index], True, [-1, index])
     #         # print "Word1's indices are:", word1.getIndex(),
-    #         #"And isDiff returns:", word1.isDiff()
+    #         "And isDiff returns:", word1.isDiff()
     #         # print "Word2's indices are:", word2.getIndex(),
-    #         #"And isDiff returns:", word2.isDiff()
+    #         "And isDiff returns:", word2.isDiff()
     #         # ans_list.append(word1)
     #         # ans_list.append(word2)
 
