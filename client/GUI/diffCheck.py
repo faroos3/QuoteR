@@ -1,8 +1,8 @@
 '''
 This is going to be where Samad test things out with text files or whatever.
-Going to see if I can split up files line by line, put them into a list, use
-a data structure, all that jazz.
-
+Going to see if I can split up files line by
+line, put them into a list, use a data
+structure, all that jazz.
 '''
 
 from DiffWord import DiffWord
@@ -118,7 +118,9 @@ def get_DiffWords(words1, words2):
 
     more_words = max(num_words1, num_words2)
     less_words = min(num_words1, num_words2)
+
     same_length = num_words1 == num_words2  # use to see which helper to call
+
     if(same_length):
         ans_list = same_length_list(words1, words2)
     else:

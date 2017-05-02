@@ -25,6 +25,7 @@ sec = 0
 class Page(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self,master)
+
     def show(self):
         self.lift()
         
@@ -39,9 +40,10 @@ class WelcomePage(Page):
         label.config(font=("Courier", 44))
         ##formating
         label.pack(side="top", fill="both", expand=True)
+        ##label.configure(background='navajo white')
 
 ##this page has a text box where the user can input the correct version of the
-##input in text format
+##input in text format 
 class InputPage(Page): 
     def __init__(self, master,fnout):
         Page.__init__(self, master)
@@ -49,6 +51,8 @@ class InputPage(Page):
         label = tk.Label(self, text="Enter your text")
         label.config(font=("Courier", 44)) 
         label.grid(row=0, column=0,sticky="ns")
+        ##label.configure(background='white')
+
        
         ##using .grid over pack for a more structured ui
         self.fnout = fnout
@@ -83,9 +87,11 @@ class InputPage(Page):
                                        height=24,
                                        width=84,
                                        font=textFont1)
+
       
         self.textWidget.grid(row=1, column=0, sticky="nsew")
         self.textWidget.grid(row=1, column=0, padx=(100, 0))
+
              
         
  
@@ -113,12 +119,14 @@ class ReadyPage(Page):
                 audio = r.listen(source)
 
             # This is an alternative to goolge if we want, but it's also a requirment for the google api
+            """
             try:
                 print("Sphinx thinks you said " + r.recognize_sphinx(audio))
             except sr.UnknownValueError:
                 print("Sphinx could not understand audio")
             except sr.RequestError as e:
                 print("Sphinx error; {0}".format(e))
+            """
 
             # recognize speech using Google Speech Recognition
             try:
@@ -172,7 +180,7 @@ class ReadyPage(Page):
 class TimerPage(Page):
     def __init__(self, master):
         Page.__init__(self, master)
-        label = tk.Label(self, text="Press stop when finished ")
+        label = tk.Label(self, text="Stay silent for 5 seconds when finished")
         label.config(font=("Courier", 32))
         label.pack(side="top", fill="both", expand=True)   
        
@@ -181,22 +189,21 @@ class TimerPage(Page):
           
       
     
- ##potetial processing page if the algorithm takes a while to find differences       
-class ProcessingPage(Page):
-    def __init__(self,master):
-        Page.__init__(self,master)
-        label = tk.Label(self, text="Processing... ")
-        label.config(font=("Courier", 32))
-        label.pack(side="top", fill="both", expand=True)
- 
+
  ##here both the output and the input text will be compared and differences will be highlighted       
 class ComparisonPage(Page):
     def __init__(self,master):
         
         def loadInputText():
             file = open("input.txt")
-            for line in file:
-                self.textWidget.insert(END,line)
+            i = 0
+            for word in file:
+                i+=1
+                if(i%10 == 0):
+                    self.textWidget.insert(END,str(word)+" \n")
+                else:
+                    self.textWidget.insert(END,str(word)+" ")
+
             file.close() 
         def loadAudioText():
             file1 = open("input.txt")
@@ -207,13 +214,25 @@ class ComparisonPage(Page):
             num_f2_words = len(f2_words)
 
             diffWords = get_DiffWords(f1_words, f2_words)
-            self.textWidget2.insert(END,str(num_f1_words))
-            self.textWidget2.insert(END,str(num_f2_words))
+            i = 0
             for word in diffWords:
+                i+=1
                 if(word.isDiff()):
-                    self.textWidget2.insert(END,(str(word) + " is different."))
+                    if(i%10 == 0):
+                        self.textWidget2.tag_configure('color', foreground='red')
+                        self.textWidget2.insert(END, str(word)+" \n", 'color')
+                    else:
+                        self.textWidget2.tag_configure('color', foreground='red')
+                        self.textWidget2.insert(END, str(word)+" ", 'color')
                 else:
-                    self.textWidget2.insert(END,(str(word) + " is not different."))
+                    if(i%10 == 0):
+                        self.textWidget2.insert(END,str(word)+" \n")
+                    else:
+                        self.textWidget2.insert(END,str(word)+" ")
+
+
+
+                   
 
            ## for line2 in file2:
             ##    self.textWidget2.insert(END,line2)
@@ -340,7 +359,6 @@ class MyFirstGUI(tk.Frame):
         p1 = InputPage(self,inText)
         p2 = ReadyPage(self)
         p3 = TimerPage(self)
-        p4 = ProcessingPage(self)
         p5 = ComparisonPage(self)
         
         ##make button frames
@@ -356,22 +374,21 @@ class MyFirstGUI(tk.Frame):
         p1.place(in_=container, x=0, y=0, relwidth=1, relheight=1) 
         p2.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
         p3.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
-        p4.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
         p5.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
+        p0.configure(background='blue')
          
         ##place all the buttons      
         b0 = tk.Button(buttonframe, text="Welcome", command=p0.lift)
         b1 = tk.Button(buttonframe, text="Input", command=p1.lift)
         b2 = tk.Button(buttonframe, text="Ready", command=p2.lift)
         b3 = tk.Button(buttonframe, text="Timer", command=p3.lift)
-        b4 = tk.Button(buttonframe, text="Processing", command=p4.lift)
         b5 = tk.Button(buttonframe, text="Comparison", command=p5.lift)
         
         b0.pack(side="left")
+        ##b0.configure(background='blue')
         b1.pack(side="left")
         b2.pack(side="left")
         b3.pack(side="left")
-        b4.pack(side="left")
         b5.pack(side="left")
                         
         ## show welcome page that will link to others
@@ -403,6 +420,8 @@ inText = "input.txt"
 audioText = "audioInput.txt"
 root = tk.Tk()
 my_gui = MyFirstGUI(root)
+root.tk_setPalette(background='navajo white', foreground='black',
+               activeBackground='black', activeForeground='white')
 my_gui.pack(side="top", fill="both", expand=True)
 
 ##root.wm_geometry("1024x768")

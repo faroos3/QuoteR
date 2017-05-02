@@ -1,8 +1,8 @@
 '''
 This is going to be where Samad test things out with text files or whatever.
-Going to see if I can split up files line by line, put them into a list,
-use a data structure, all that jazz.
-
+Going to see if I can split up files line by line,
+put them into a list, use a data
+structure, all that jazz.
 '''
 
 from DiffWord import DiffWord
@@ -63,7 +63,6 @@ lengths. will return strings of diff length.
 '''
 words2 is the longer list
 '''
-
 
 def diff_length_list(words2, words1):
     a_list = []
@@ -156,9 +155,9 @@ def get_DiffWords(words1, words2):
     #         # word1 = DiffWord(words1[index], True, [index, -1])
     #         # word2 = DiffWord(words2[index], True, [-1, index])
     #         # print "Word1's indices are:", word1.getIndex(),
-    #         "And isDiff returns:", word1.isDiff()
-    #         # print "Word2's indices are:", word2.getIndex(),
-    #         "And isDiff returns:", word2.isDiff()
+    #           "And isDiff returns:", word1.isDiff()
+    #         # print "Word2's indices are:", word2.getIndex(),\
+    #           "And isDiff returns:", word2.isDiff()
     #         # ans_list.append(word1)
     #         # ans_list.append(word2)
 
@@ -186,9 +185,10 @@ if __name__ == "__main__":
     print "\n\nThe words in f2 (derived):\n"
     for word in f2_words:
         print word,
-    # end testing purposes. the only differences between the two tests
-    # are the names changed to Moorthy, the student
-    # writing bad code (instead of the master dying), the change on one word
+    # end testing purposes. the only differences between
+    # the two tests are the names changed to Moorthy, the student
+    # writing bad code (instead of the master
+    # dying), the change on one word
     # to badDocumentation, and bad code at the end.
     print "\n\n"
     # see if the DiffWord worked
