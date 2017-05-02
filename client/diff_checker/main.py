@@ -76,10 +76,12 @@ def diff_length_list(words2, words1):
             a_list.append(word)
         else:
             if(words1[i] == words2[i + offset + 1]):
+                #checks next work in line
                 diff_word2 = DiffWord(
                     words2[i + offset], True, [-1, i + offset])
                 nextword = DiffWord(words1[i], False, [i, i + offset + 1])
                 offset += 1
+                #changes offset to not look at same words twice
                 a_list.append(diff_word2)
                 a_list.append(nextword)
             elif(words1[i + 1] == words2[i + offset]):
