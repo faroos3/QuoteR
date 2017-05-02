@@ -30,6 +30,8 @@ class Page(tk.Frame):
 
     def show(self):
         self.lift()
+    def drop(self):
+        self.lower()
 
 # This page will just be a welcome slide that
 # outputs text and directs the user to the next page.
@@ -111,6 +113,7 @@ class ReadyPage(Page):
         Page.__init__(self, master)
 
         def speechAPI():
+            # self.drop()
             r = sr.Recognizer()
             with sr.Microphone() as source:
                 print("Say something!")
@@ -199,9 +202,11 @@ class ComparisonPage(Page):
         def loadInputText():
             file = open("input.txt")
             i = 0
-            for word in file:
+            f1_words = get_words(file)
+
+            for word in f1_words:
                 i += 1
-                if(i % 10 == 0):
+                if(i % 7 == 0):
                     self.textWidget.insert(END, str(word) + " \n")
                 else:
                     self.textWidget.insert(END, str(word) + " ")
@@ -220,11 +225,16 @@ class ComparisonPage(Page):
             i = 0
             j = 0
             for word in diffWords:
-                i += 1
-                if(word.isDiff()):
-                    j+=1
-                    if(j%2 == 0):
-                        if(i % 10 == 0):
+                if((num_f2_words == num_f1_words or num_f2_words > num_f1_words) and word.get_pos_in_derived() == -1):
+                    continue
+                if(num_f1_words > num_f2_words and word.get_pos_in_original() == -1):
+                    continue
+                else:
+                    i += 1
+                    if (word.isDiff()):
+                        j += 1
+                        # if(j%2 == 0):
+                        if(i % 7 == 0):
                             self.textWidget2.tag_configure(
                                 'color', foreground='red')
                             self.textWidget2.insert(
@@ -232,12 +242,13 @@ class ComparisonPage(Page):
                         else:
                             self.textWidget2.tag_configure(
                                 'color', foreground='red')
-                            self.textWidget2.insert(END, str(word) + " ", 'color')
-                else:
-                    if(i % 10 == 0):
-                        self.textWidget2.insert(END, str(word) + " \n")
+                            self.textWidget2.insert(
+                                END, str(word) + " ", 'color')
                     else:
-                        self.textWidget2.insert(END, str(word) + " ")
+                        if(i % 7 == 0):
+                            self.textWidget2.insert(END, str(word) + " \n")
+                        else:
+                            self.textWidget2.insert(END, str(word) + " ")
 
             # for line2 in file2:
             # self.textWidget2.insert(END,line2)
@@ -343,8 +354,8 @@ class MyFirstGUI(tk.Frame):
         # make pages
         p0 = WelcomePage(self)
         p1 = InputPage(self, inText)
-        p2 = ReadyPage(self)
-        p3 = TimerPage(self)
+        p2 = TimerPage(self)
+        p3 = ReadyPage(self)
         p5 = ComparisonPage(self)
 
         # make button frames
@@ -361,13 +372,13 @@ class MyFirstGUI(tk.Frame):
         p2.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
         p3.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
         p5.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
-        p0.configure(background='blue')
+        
 
         # place all the buttons
         b0 = tk.Button(buttonframe, text="Welcome", command=p0.lift)
         b1 = tk.Button(buttonframe, text="Input", command=p1.lift)
-        b2 = tk.Button(buttonframe, text="Ready", command=p2.lift)
-        b3 = tk.Button(buttonframe, text="Timer", command=p3.lift)
+        b3 = tk.Button(buttonframe, text="Ready", command=p3.lift)
+        b2 = tk.Button(buttonframe, text="Instruct", command=p2.lift)
         b5 = tk.Button(buttonframe, text="Comparison", command=p5.lift)
 
         b0.pack(side="left")
@@ -386,8 +397,8 @@ class MyFirstGUI(tk.Frame):
 # users screen later
     def centerWindow(self):
 
-        w = 1280
-        h = 720
+        w = 1400
+        h = 800
 
         sw = self.master.winfo_screenwidth()
         sh = self.master.winfo_screenheight()
@@ -396,6 +407,8 @@ class MyFirstGUI(tk.Frame):
         y = (sh - h) / 2
 
         self.master.geometry('%dx%d+%d+%d' % (w, h, x, y))
+
+
 # initialization and running
 inText = "input.txt"
 audioText = "audioInput.txt"

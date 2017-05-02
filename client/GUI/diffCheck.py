@@ -82,7 +82,7 @@ def diff_length_list(words2, words1):
                 offset += 1
                 a_list.append(diff_word2)
                 a_list.append(nextword)
-            elif(words1[i + 1] == words2[i + offset]):
+            elif(i+1<len(words1) and words1[i + 1] == words2[i + offset]):
                 diff_word1 = DiffWord(words1[i], True, [i, -1])
                 a_list.append(diff_word1)
 
@@ -91,6 +91,12 @@ def diff_length_list(words2, words1):
                 diff_word2 = DiffWord(words2[i], True, [-1, i])
                 a_list.append(diff_word1)
                 a_list.append(diff_word2)
+    long_index = i+offset+1
+    while(long_index < len(words2)):
+        diff_word = DiffWord(words2[long_index],True,[-1,long_index])
+        a_list.append(diff_word)
+        long_index+=1
+
     return a_list
 
 
