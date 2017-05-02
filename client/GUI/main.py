@@ -188,7 +188,7 @@ class ReadyPage(Page):
 class TimerPage(Page):
     def __init__(self, master):
         Page.__init__(self, master)
-        label = tk.Label(self, text="Stay silent for 5 seconds when finished")
+        label = tk.Label(self, text="Stay silent for 5 seconds\n when finished reciting on next page")
         label.config(font=("Courier", 32))
         label.pack(side="top", fill="both", expand=True)
 
